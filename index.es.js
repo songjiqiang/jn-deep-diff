@@ -1,26 +1,5 @@
 'use strict';
 
-var $scope;
-var conflict;
-var conflictResolution = [];
-if (typeof global === 'object' && global) {
-    $scope = global;
-} else if (typeof window !== 'undefined') {
-    $scope = window;
-} else {
-    $scope = {};
-}
-conflict = $scope.JNDeepDiff;
-if (conflict) {
-    conflictResolution.push(
-      function () {
-          if ('undefined' !== typeof conflict && $scope.JNDeepDiff === findDiff) {
-              $scope.JNDeepDiff = conflict;
-              conflict = undefined;
-          }
-      });
-}
-
 //找出指定的两个对象之间的差异
 function findDiff(args) {
     var diffData = {};
@@ -110,30 +89,4 @@ function realTypeOf(subject) {
     return 'object';
 }
 
-Object.defineProperties(findDiff, {
-
-    findDiff: {
-        value: findDiff,
-        enumerable: true
-    },
-    isConflict: {
-        value: function () {
-            return 'undefined' !== typeof conflict;
-        },
-        enumerable: true
-    },
-    noConflict: {
-        value: function () {
-            if (conflictResolution) {
-                conflictResolution.forEach(function (it) {
-                    it();
-                });
-                conflictResolution = null;
-            }
-            return findDiff;
-        },
-        enumerable: true
-    }
-});
-
-export default findDiff;
+export default { findDiff: findDiff };
