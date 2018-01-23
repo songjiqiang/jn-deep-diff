@@ -1,31 +1,31 @@
 'use strict';
 
-//ÕÒ³öÖ¸¶¨µÄÁ½¸ö¶ÔÏóÖ®¼äµÄ²îÒì
+//æ‰¾å‡ºæŒ‡å®šçš„ä¸¤ä¸ªå¯¹è±¡ä¹‹é—´çš„å·®å¼‚
 function findDiff(args) {
     var diffData = {};
-    //Êı×é±È½Ï·½Ê½£ºÄ¬ÈÏ¸ù¾İId×Ö¶Î±È½Ï
+    //æ•°ç»„æ¯”è¾ƒæ–¹å¼ï¼šé»˜è®¤æ ¹æ®Idå­—æ®µæ¯”è¾ƒ
     if (args.arrayComparer === undefined || (typeof (args.arrayComparer) !== 'string' && typeof (args.arrayComparer) !== 'function')) {
         args.arrayComparer = 'id';
     }
     for (var eb in args.newData) {
-        //Ö÷¼üIdÊÇ±ØĞëµÄ
+        //ä¸»é”®Idæ˜¯å¿…é¡»çš„
         if (eb === 'id') {
             diffData[eb] = args.newData[eb];
         }
-            //Èç¹ûÊÇ¶ÔÏó£¬ÔòËµÃ÷ÊÇ»ù´¡×ÊÁÏ£¬¸¨Öú×ÊÁÏ µÈÈıÖµ¶ÔÏó×Ö¶Î
+            //å¦‚æœæ˜¯å¯¹è±¡ï¼Œåˆ™è¯´æ˜æ˜¯åŸºç¡€èµ„æ–™ï¼Œè¾…åŠ©èµ„æ–™ ç­‰ä¸‰å€¼å¯¹è±¡å­—æ®µ
         else if (realTypeOf(args.newData[eb]) === 'object') {
             if (args.oldData[eb] === undefined || args.newData[eb].id !== args.oldData[eb].id) {
                 diffData[eb] = args.newData[eb];
             }
         }
-            //Èç¹ûÊÇÊı×é£¬ÔòËµÃ÷ÊÇÃ÷Ï¸
+            //å¦‚æœæ˜¯æ•°ç»„ï¼Œåˆ™è¯´æ˜æ˜¯æ˜ç»†
         else if (Array.isArray(args.newData[eb])) {
             if (Array.isArray(args.oldData[eb])) {
                 diffData[eb] = [];
                 for (var i = 0; i < args.newData[eb].length; i++) {
                     var oldEntitys = findEntity(args.oldData[eb], args.newData[eb][i], args.arrayComparer);
                     if (oldEntitys) {
-                        //µİ¹é
+                        //é€’å½’
                         var diffEntity = findDiff({
                             oldData: oldEntitys,
                             newData: args.newData[eb][i],
@@ -40,7 +40,7 @@ function findDiff(args) {
                 diffData[eb] = args.newData[eb];
             }
         }
-            //ÆäËûÀàĞÍµÄ×Ö¶Î£¨Êı×Ö£¬×Ö·û´®£¬²¼¶û£©
+            //å…¶ä»–ç±»å‹çš„å­—æ®µï¼ˆæ•°å­—ï¼Œå­—ç¬¦ä¸²ï¼Œå¸ƒå°”ï¼‰
         else if (args.newData[eb] !== undefined) {
             if (args.oldData[eb] === undefined || args.newData[eb] !== args.oldData[eb]) {
                 diffData[eb] = args.newData[eb];
@@ -50,15 +50,15 @@ function findDiff(args) {
     return diffData;
 }
 
-//¸ù¾İÖ¸¶¨µÄÖ÷¼üIdÔÚÖ¸¶¨µÄÊµÌåÊı×éÖĞ²éÕÒ£¬Èç¹û´æÔÚÔò·µ»Ø¸ÃÊµÌå¶ÔÏó£¬Èç¹û²»´æÔÚÔò·µ»Ø null
+//æ ¹æ®æŒ‡å®šçš„ä¸»é”®Idåœ¨æŒ‡å®šçš„å®ä½“æ•°ç»„ä¸­æŸ¥æ‰¾ï¼Œå¦‚æœå­˜åœ¨åˆ™è¿”å›è¯¥å®ä½“å¯¹è±¡ï¼Œå¦‚æœä¸å­˜åœ¨åˆ™è¿”å› null
 function findEntity(oldEntitys, newEntity, arrayComparer) {
     if (typeof (arrayComparer) === 'string') {
         if (newEntity[arrayComparer] === undefined) {
-            throw new Error('arrayComparer ²ÎÊı ' + arrayComparer + ' ÔÚÊı×é¶ÔÏóÖĞ²»´æÔÚ£¬Çë¼ì²é£¡');
+            throw new Error('arrayComparer å‚æ•° ' + arrayComparer + ' åœ¨æ•°ç»„å¯¹è±¡ä¸­ä¸å­˜åœ¨ï¼Œè¯·æ£€æŸ¥ï¼');
         }
         for (var i = 0; i < oldEntitys.length; i++) {
             if (oldEntitys[i][arrayComparer] === undefined) {
-                throw new Error('arrayComparer ²ÎÊı ' + arrayComparer + ' ÔÚÊı×é¶ÔÏóÖĞ²»´æÔÚ£¬Çë¼ì²é£¡');
+                throw new Error('arrayComparer å‚æ•° ' + arrayComparer + ' åœ¨æ•°ç»„å¯¹è±¡ä¸­ä¸å­˜åœ¨ï¼Œè¯·æ£€æŸ¥ï¼');
             }
             if (oldEntitys[i][arrayComparer] === newEntity[arrayComparer]) {
                 return oldEntitys[i];
