@@ -1,6 +1,6 @@
 {
   "name": "jn-deep-diff",
-  "version": "0.1.4",
+  "version": "0.0.1",
   "description": "用于查找两个js对象之间的差异，并返回一个差异对象",
   "main": "index.js",
   "module": "index.es.js",
